@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Quizzy App</string>
+    <string name="QuestionText">Here Your Question will be Displayed?</string>
+    <string name="Image_desc">Quiz Image</string>
 </resources>

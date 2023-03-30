@@ -56,12 +56,13 @@
 
             <EditText
                 android:id="@+id/namet"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:background="@drawable/border_text_selected"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:textColor="#363A43"
+                android:textAlignment="center"
                 android:hint="Name"
                 android:textColorHint="#7A8089"
                 android:inputType="textCapWords" />
