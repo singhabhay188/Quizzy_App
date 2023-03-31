@@ -67,6 +67,14 @@
                 android:textColorHint="#7A8089"
                 android:inputType="textCapWords" />
 
+            <Spinner
+                android:id="@+id/drop_menu"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="50dp"
+                android:entries="@array/drop_menu_entry"/>
+
+
             <Button
                 android:id="@+id/startb"
                 android:layout_height="wrap_content"

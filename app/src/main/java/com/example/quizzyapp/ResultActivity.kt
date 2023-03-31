@@ -16,9 +16,9 @@ class ResultActivity : AppCompatActivity() {
         val resultscore = findViewById<TextView>(R.id.resultscoreid)
         val finButton = findViewById<Button>(R.id.finButton)
 
-        val name = intent.getStringExtra(Constant2.PLAYER_NAME)
-        val cans = intent.getIntExtra(Constant2.CORRECT_ANS,0)
-        val tques = intent.getIntExtra(Constant2.TOTAL_QUESTION,0)
+        val name = intent.getStringExtra(PLAYER_NAME)
+        val cans = intent.getIntExtra(CORRECT_ANS,0)
+        val tques = intent.getIntExtra(TOTAL_QUESTION,0)
 
         resultname.text = name
         resultscore.text="Your score is ${cans} out of ${tques}"

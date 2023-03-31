@@ -8,9 +8,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import com.example.quizzyapp.Constant2.CORRECT_ANS
-import com.example.quizzyapp.Constant2.TOTAL_QUESTION
 
+public const val PLAYER_NAME = "user_name"
+public const val TOTAL_QUESTION = "no_of_questions"
+public const val CORRECT_ANS = "correct_answers"
+public const val SELECTED_TOPIC = "selected_topic"
 class Questionactivity : AppCompatActivity(), View.OnClickListener{
 
     private lateinit var imageid:ImageView
@@ -55,7 +57,8 @@ class Questionactivity : AppCompatActivity(), View.OnClickListener{
         option4.setOnClickListener(this)
         submitbutton.setOnClickListener(this)
 
-        questionList=Constant2.getQuestions()
+        questionList= if(intent.getIntExtra(SELECTED_TOPIC,0)==0)   Constant2.getQuestions()
+                        else    Constant.getQuestions()
         size=questionList.size
         progressBar.max=size
         score=0
@@ -177,11 +180,11 @@ class Questionactivity : AppCompatActivity(), View.OnClickListener{
                 }
                     //ending the game
                 else{
-                    val player_name = intent.getStringExtra(Constant2.PLAYER_NAME)
+                    val player_name = intent.getStringExtra(PLAYER_NAME)
                     val intent = Intent(this,ResultActivity::class.java)
-                    intent.putExtra(Constant2.PLAYER_NAME,player_name)
-                    intent.putExtra(Constant2.TOTAL_QUESTION,questionList.size)
-                    intent.putExtra(Constant2.CORRECT_ANS,score)
+                    intent.putExtra(PLAYER_NAME,player_name)
+                    intent.putExtra(TOTAL_QUESTION,questionList.size)
+                    intent.putExtra(CORRECT_ANS,score)
                     startActivity(intent)
                     finish()
                 }

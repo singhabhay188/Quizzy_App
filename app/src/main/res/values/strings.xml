@@ -3,4 +3,8 @@
     <string name="QuestionText">Here Your Question will be Displayed?</string>
     <string name="Image_desc">Quiz Image</string>
     <string name="congrats_mess">Congratulations !!!</string>
+    <string-array name="drop_menu_entry">
+        <item>Logo</item>
+        <item>Flags</item>
+    </string-array>
 </resources>
