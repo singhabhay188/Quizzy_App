@@ -14,9 +14,9 @@ The following **required** functionality is completed:
 
 ## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of implemented user stories: 
+(//3 questions are just for reference in Walkthrough)
 ![quizzy](https://user-images.githubusercontent.com/102821014/229188139-851adc83-a09d-42a8-a24b-fccc8e100a80.gif)
-//3 questions are just for reference in Walkthrough
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 
