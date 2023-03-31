@@ -4,14 +4,13 @@ import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
 
 class Questionactivity : AppCompatActivity(), View.OnClickListener{
 
-    private lateinit var Imageid:ImageView
+    private lateinit var imageid:ImageView
     private lateinit var submitbutton:Button
     private lateinit var option1:TextView
     private lateinit var option2:TextView
@@ -25,14 +24,17 @@ class Questionactivity : AppCompatActivity(), View.OnClickListener{
     private var score=0
     private var qposition=0
     private lateinit var questionList: List<Question>
+    private var size=0
 
     val options = mutableListOf<TextView>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    var answerSubmitted = false //used to track whether answer submitted or not
+
+    override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_questionactivity)
 
-        Imageid = findViewById(R.id.imageid)
+        imageid = findViewById(R.id.imageid)
         submitbutton = findViewById(R.id.submitb)
         option1 = findViewById(R.id.option1id)
         option2 = findViewById(R.id.option2id)
@@ -42,111 +44,134 @@ class Questionactivity : AppCompatActivity(), View.OnClickListener{
         progressBarText = findViewById(R.id.progressBartext)
         questiontext = findViewById(R.id.questiontext)
 
-        options.add(option1);    options.add(option2);    options.add(option3);    options.add(option4);
+        options.add(option1);    options.add(option2);    options.add(option3);    options.add(option4)
 
         option1.setOnClickListener(this)
         option2.setOnClickListener(this)
         option3.setOnClickListener(this)
         option4.setOnClickListener(this)
+        submitbutton.setOnClickListener(this)
 
         questionList=Constant2.getQuestions()
-        progressBar.max=questionList.size
+        size=questionList.size
+        progressBar.max=size
 
         //resetting position, score and cselected option back
         qposition = 0
         score=0
-        cselectedOption=1
+        cselectedOption=-1
 
         //initially call to create questions
-        createQuestions(qposition,questionList.get(qposition),questionList.size)
+        createQuestions()
 
-        //keep on changing when submit button is clicked
-        submitbutton.setOnClickListener {
-
-            onSubmitButton()
-
-            /*
-            qposition++;
-            if(qposition==size-1)    submitbutton.text="Finish"      //changed the button to finish from next question in last question
-            if(qposition==size){
-                Toast.makeText(this, "You Won the Game", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                createQuestions(qposition,questionList.get(qposition),size)
-            }
-            */
-        }
     }
 
-    fun createQuestions(position:Int,cquestion: Question,size:Int){
-        progressBar.progress = position+1
-        progressBarText.text = "${position+1}/$size"
+    private fun createQuestions(){
+        val cquestion=questionList.get(qposition)
+        progressBar.progress = qposition+1
+        progressBarText.text = "${qposition+1}/$size"
 
         questiontext.text=cquestion.question
-        Imageid.setImageResource(cquestion.image)
+        imageid.setImageResource(cquestion.image)
         option1.text= cquestion.options[0]
         option2.text= cquestion.options[1]
         option3.text= cquestion.options[2]
         option4.text= cquestion.options[3]
 
-        //set the selected option to cselectedOption
-        onOptionSelected()
+        //initially nothing is selected,unselect all and set answer to -1,no answer submitted and button text back to submit
+        defaultOptionSelected()
+        cselectedOption=-1
+        answerSubmitted=false
+        submitbutton.text="Submit"
     }
 
     //we need to create function that set all the options back to default and only highlight the selected option
-    //highlight = change the background + make current text dark
     private fun defaultOptionSelected(){
         for(i in options){
-            //to change color i.setTextColor(Color.RED)
+            i.setTextColor(Color.GRAY)
             i.typeface=Typeface.DEFAULT
             i.background=ContextCompat.getDrawable(this,R.drawable.border_text)
         }
     }
-
+    //highlight = change the background + make current text bold and black
     private fun onOptionSelected(){
-        //first set all to default because previously there might be some selected
-        Log.i("Question Activity","Option is selected at $cselectedOption")
+        //first set all to default because previously there might be a option selected
         defaultOptionSelected()
 
         //noe highlight the current selected option
-        var selectedOption:TextView = options.get(cselectedOption-1)
+        val selectedOption:TextView = options[cselectedOption-1]
         selectedOption.typeface = Typeface.DEFAULT_BOLD
         selectedOption.setTextColor(Color.BLACK)
         selectedOption.background = ContextCompat.getDrawable(this,R.drawable.border_text_selected)
     }
 
     private fun onSubmitButton(){
-        //first find the correct ans
-        val correctans = questionList.get(qposition).correctAns
+        //if no option is selected show toast to ask user to select an option
+        if (cselectedOption == -1) {
+            Toast.makeText(this, "Select an option to continue", Toast.LENGTH_SHORT).show()
+            return
+        }
+        //if an option is selcted,find the correct option
+        val correctans = questionList[qposition].correctAns
 
         //color it green
-        var selectedOption:TextView = options.get(correctans-1)
-        selectedOption.background = ContextCompat.getDrawable(this,R.drawable.correct_text_selected)
+        var selectedOption: TextView = options[correctans - 1]
+        selectedOption.background =
+            ContextCompat.getDrawable(this, R.drawable.correct_text_selected)
 
         //if selected option is not the correct ans color the wrong ans as red
-        if(cselectedOption!=correctans){
-            selectedOption = options.get(cselectedOption-1)
-            selectedOption.background = ContextCompat.getDrawable(this,R.drawable.incorrect_text_selected)
+        if (cselectedOption != correctans) {
+            selectedOption = options[cselectedOption - 1]
+            selectedOption.background =
+                ContextCompat.getDrawable(this, R.drawable.incorrect_text_selected)
         }
+
+        //after that change the button text to next question or finish and mark answer as submitted
+        if(qposition==size-1) submitbutton.text = "Finish"
+        else                               submitbutton.text = "Next Question"
+        answerSubmitted=true
     }
 
     override fun onClick(p0: View?){
         when(p0?.id){
             R.id.option1id -> {
-                cselectedOption=1
-                onOptionSelected()
+                if(!answerSubmitted) {
+                    cselectedOption = 1
+                    onOptionSelected()
+                }
             }
             R.id.option2id -> {
-                cselectedOption=2
-                onOptionSelected()
+                if(!answerSubmitted) {
+                    cselectedOption = 2
+                    onOptionSelected()
+                }
             }
             R.id.option3id -> {
-                cselectedOption=3
-                onOptionSelected()
+                if(!answerSubmitted) {
+                    cselectedOption = 3
+                    onOptionSelected()
+                }
             }
             R.id.option4id -> {
-                cselectedOption=4
-                onOptionSelected()
+                if(!answerSubmitted) {
+                    cselectedOption = 4
+                    onOptionSelected()
+                }
+            }
+            R.id.submitb -> {
+                //if answer not submitted
+                if(!answerSubmitted){
+                    onSubmitButton()
+                    return
+                }
+                //if answer submitted change the question or end the game
+                    //changing the question
+                if(qposition<size-1){
+                    qposition++
+                    createQuestions()
+                }
+                    //ending the game
+                else Toast.makeText(this, "You won the game", Toast.LENGTH_SHORT).show()
             }
         }
     }
