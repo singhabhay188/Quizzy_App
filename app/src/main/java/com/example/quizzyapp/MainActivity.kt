@@ -16,13 +16,14 @@ class MainActivity : AppCompatActivity() {
         val startb = findViewById<Button>(R.id.startb)
         var name:String=""
         
-        startb.setOnClickListener { 
-            if(nameet.text.toString().isEmpty()){
+        startb.setOnClickListener {
+            name = nameet.text.toString()
+            if(name.isEmpty()){
                 Toast.makeText(this, "Enter you name to Continue", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            name = nameet.text.toString()
             val intent = Intent(this,Questionactivity::class.java)
+            intent.putExtra(Constant2.PLAYER_NAME,name)
             startActivity(intent)
             finish()    //because we don't need to return back to current activity
         }

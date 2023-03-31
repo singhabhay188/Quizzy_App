@@ -1,5 +1,6 @@
 package com.example.quizzyapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
+import com.example.quizzyapp.Constant2.CORRECT_ANS
+import com.example.quizzyapp.Constant2.TOTAL_QUESTION
 
 class Questionactivity : AppCompatActivity(), View.OnClickListener{
 
@@ -55,6 +58,7 @@ class Questionactivity : AppCompatActivity(), View.OnClickListener{
         questionList=Constant2.getQuestions()
         size=questionList.size
         progressBar.max=size
+        score=0
 
         //resetting position, score and cselected option back
         qposition = 0
@@ -125,6 +129,7 @@ class Questionactivity : AppCompatActivity(), View.OnClickListener{
             selectedOption.background =
                 ContextCompat.getDrawable(this, R.drawable.incorrect_text_selected)
         }
+        else    score++
 
         //after that change the button text to next question or finish and mark answer as submitted
         if(qposition==size-1) submitbutton.text = "Finish"
@@ -171,7 +176,15 @@ class Questionactivity : AppCompatActivity(), View.OnClickListener{
                     createQuestions()
                 }
                     //ending the game
-                else Toast.makeText(this, "You won the game", Toast.LENGTH_SHORT).show()
+                else{
+                    val player_name = intent.getStringExtra(Constant2.PLAYER_NAME)
+                    val intent = Intent(this,ResultActivity::class.java)
+                    intent.putExtra(Constant2.PLAYER_NAME,player_name)
+                    intent.putExtra(Constant2.TOTAL_QUESTION,questionList.size)
+                    intent.putExtra(Constant2.CORRECT_ANS,score)
+                    startActivity(intent)
+                    finish()
+                }
             }
         }
     }

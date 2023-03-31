@@ -1,6 +1,11 @@
 package com.example.quizzyapp
 
 object Constant2 {
+
+    public const val PLAYER_NAME = "user_name"
+    public const val TOTAL_QUESTION = "no_of_questions"
+    public const val CORRECT_ANS = "correct_answers"
+
     fun getQuestions():ArrayList<Question> {
         val questionsList = ArrayList<Question>()
 
@@ -57,7 +62,21 @@ object Constant2 {
             "Which Company's logo is this?",
             R.drawable.img8,
             arrayOf<String>("Dettol","Savlon","Dove","Lux"),
-            1)
+            3)
+        questionsList.add(q)
+
+        q = Question(9,
+            "Which Company's logo is this?",
+            R.drawable.img9,
+            arrayOf<String>("Ferrari","Lamborghini","Bentley","Honda"),
+            2)
+        questionsList.add(q)
+
+        q = Question(10,
+            "Which Company's logo is this?",
+            R.drawable.img10,
+            arrayOf<String>("Brazzers","Indie","Naughty America","Vixen"),
+            3)
         questionsList.add(q)
 
         return questionsList
